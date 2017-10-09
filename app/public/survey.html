@@ -198,10 +198,9 @@
           })
           $.post("/api/new", userData)
           .done(function(data) {
-            console.log(userData);
             $("#myModal").modal('toggle');
             $("#closeName").html(bestName);
-            $("#closePhoto").html(bestPhoto);
+            $("#closePhoto").html("<img src=" + bestPhoto + " alt=" + bestPhoto + ">");
           });
         }
 			})
