@@ -195,13 +195,13 @@
                 bestPhoto = data[i].photo;
               }
             }
+            $.post("/api/new", userData)
+            .done(function(data) {
+              $("#myModal").modal('toggle');
+              $("#closeName").html(bestName);
+              $("#closePhoto").html("<img src=" + bestPhoto + " alt=" + bestPhoto + " style='max-width: 500px'>");
+            });
           })
-          $.post("/api/new", userData)
-          .done(function(data) {
-            $("#myModal").modal('toggle');
-            $("#closeName").html(bestName);
-            $("#closePhoto").html("<img src=" + bestPhoto + " alt=" + bestPhoto + " style='max-width: 500px'>");
-          });
         }
 			})
 		</script>
