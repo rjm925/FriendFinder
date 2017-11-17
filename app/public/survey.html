@@ -159,44 +159,57 @@
 		</div>
 
 		<script type="text/javascript">
+      // Event for submit button
 			$("#submit").on("click", function(event) {
 				event.preventDefault();
 
-				var userData = {
+        // Obtain data in form
+				let userData = {
 	    		name: $("#name").val(),
 	    		photo: $("#photo").val(),
 	    		scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(), $("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val()]
 	    	}
 
-        var filled = true;
-        for (var i = 0; i < userData.scores.length; i++) {
+        // Checks if everything is filled out
+        let filled = true;
+        for (let i = 0; i < userData.scores.length; i++) {
           if (userData.scores[i] === "") {
             filled = false;
           }
         }
         
+        // Alert not everything is filled
         if (userData.name === "" || userData.photo === "" || filled === false) {
           alert("Not everything filled");
         }
 
+        // Searches array of friends for closest match
         else {
-          var bestName;
-          var bestPhoto;
+          // Variables to hold closest info
+          let bestName;
+          let bestPhoto;
+          // Get list of friends from api
           $.get("/api/friends", function(data) {
-            var closest = 50;
-            for (var i = 0; i < data.length; i++) {
-              var currentDif = 0;
-              for (var j = 0; j < data[i].scores.length; j++) {
+            let closest = 50;
+            // Loops through friends
+            for (let i = 0; i < data.length; i++) {
+              // Resets dif score for every friend
+              let currentDif = 0;
+              // Loops through score of friend
+              for (let j = 0; j < data[i].scores.length; j++) {
                 currentDif += Math.abs(userData.scores[j] - data[i].scores[j]);
               }
+              // Closest match found
               if (currentDif < closest) {
                 closest = currentDif;
                 bestName = data[i].name;
                 bestPhoto = data[i].photo;
               }
             }
+            // Adds user to api
             $.post("/api/new", userData)
             .done(function(data) {
+              // Displays closest match
               $("#myModal").modal('toggle');
               $("#closeName").html(bestName);
               $("#closePhoto").html("<img src=" + bestPhoto + " alt=" + bestPhoto + " style='max-width: 500px'>");
